@@ -1,37 +1,19 @@
 # Data
 
-This folder will contain the workflow event dataset used in the project.
+This project uses the **BPI Challenge 2012** event log, a real process mining dataset related to a loan application process.
 
-## Planned Dataset Structure
+The original dataset is available from 4TU.ResearchData:
 
-Each row will represent one workflow event.
+- Dataset: BPI Challenge 2012
+- Source: 4TU.ResearchData / Eindhoven University of Technology
+- Format: `.xes.gz`
+- Original file: `BPI_Challenge_2012.xes.gz`
 
-Expected columns:
+## Data Usage in This Repository
 
-| Column | Description |
-|---|---|
-| case_id | Unique identifier for each workflow case |
-| activity | Name of the workflow step/activity |
-| timestamp | Date and time when the event occurred |
-| user_id | User or team responsible for the activity |
-| department | Department responsible for the activity |
-| case_type | Type/category of the workflow case |
-| priority | Priority level of the case |
-| sla_hours | SLA target in hours |
-| status | Current or final status of the case |
+To keep the repository lightweight, this GitHub repository does **not** include the full raw dataset.
 
-## Example Questions
+Instead, it includes a small sample file:
 
-This dataset will be used to answer:
-
-1. Which activities take the longest?
-2. Which cases are most likely to miss SLA?
-3. Where does rework happen most often?
-4. Which departments handle the highest workload?
-5. What process improvements can reduce delays?
-
-## Data Source
-
-For the first version of this project, I will use a synthetic workflow event dataset.
-
-The dataset will be generated to simulate realistic business process behavior, including delays, approvals, rework, and SLA breaches.
+```text
+data/sample/bpi_2012_events_sample.csv
