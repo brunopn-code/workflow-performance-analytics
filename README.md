@@ -2,29 +2,29 @@
 
 ## Project Overview
 
-This portfolio project analyzes workflow event data to identify bottlenecks, delays, rework, and SLA risk in business processes.
+This portfolio project analyzes the BPI Challenge 2012 event log, a real process mining dataset related to a loan application process.
 
-The goal is to simulate how a Data Analyst or Analytics Consultant would help an organization understand where operational inefficiencies happen and recommend improvements based on data.
+The goal is to identify bottlenecks, delays, rework patterns, resource workload, and process inefficiencies using Python, SQL, and dashboarding.
 
 ## Business Problem
 
-Organizations often use workflow systems to manage document approvals, service requests, internal processes, and customer operations.
+Loan application processes often involve multiple workflow steps, decisions, validations, and handoffs between users or departments.
 
-However, these workflows can become slow due to:
+When these processes are not monitored properly, organizations may face:
 
+- long case durations
+- repeated activities and rework
 - bottleneck activities
-- repeated rework
-- long approval times
 - uneven workload distribution
-- cases at risk of missing SLA deadlines
+- delays in decision-making
 
-This project uses data analysis to answer:
+This project uses event log analysis to answer:
 
-1. Which workflow steps create the biggest delays?
-2. Which cases are most likely to miss SLA?
-3. Where does rework happen most often?
-4. What operational changes could improve process efficiency?
-
+1. Which workflow activities happen most frequently?
+2. Which activities may contribute most to delays?
+3. How long do loan application cases take from start to finish?
+4. Which resources handle the highest workload?
+5. Where do rework patterns appear in the process?
 ## Tools Planned
 
 - Python
