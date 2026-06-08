@@ -6,3 +6,5 @@ scikit-learn
 duckdb
 jupyter
 streamlit
+pm4py
+tqdm
