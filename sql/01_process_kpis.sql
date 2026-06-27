@@ -1,3 +1,12 @@
+-- Process KPI queries for the BPI Challenge 2012 event log
+-- SQL dialect: DuckDB
+-- Assumes a table/view named "events" is available with the processed event log.
+
+
+-- ============================================================
+-- 1. Dataset Overview KPI
+-- ============================================================
+
 SELECT 
     COUNT(*) AS total_events,
     COUNT(DISTINCT case_id) AS total_cases,
@@ -5,8 +14,17 @@ SELECT
     COUNT(DISTINCT resource) AS total_resources,
     MIN(timestamp) AS first_event_timestamp,
     MAX(timestamp) AS last_event_timestamp
-FROM events
+FROM events;
 
+
+-- ============================================================
+-- 2. Case Duration View
+-- ============================================================
+-- Calculates each case duration from first event to last event.
+-- duration_days_exact keeps decimal days.
+-- duration_days floors the value to match the EDA duration categories.
+
+CREATE OR REPLACE VIEW case_duration AS
 WITH case_times AS (
     SELECT
         case_id,
@@ -15,26 +33,38 @@ WITH case_times AS (
     FROM events
     GROUP BY case_id
 )
-
 SELECT
     case_id,
     case_start,
     case_end,
-    DATE_DIFF('hour', case_start, case_end) / 24.0 AS duration_days
-FROM case_times
-ORDER BY duration_days DESC
+    DATE_DIFF('second', case_start, case_end) / 86400.0 AS duration_days_exact,
+    CAST(FLOOR(DATE_DIFF('second', case_start, case_end) / 86400.0) AS INTEGER) AS duration_days
+FROM case_times;
 
+
+-- ============================================================
+-- 3. Case Duration Category View
+-- ============================================================
+-- Groups cases into duration categories used in the EDA.
+
+CREATE OR REPLACE VIEW case_duration_category AS
 SELECT
     case_id,
     duration_days,
+    duration_days_exact,
     CASE
         WHEN duration_days = 0 THEN 'Same day'
-        WHEN duration_days <= 1 THEN '1 day'
+        WHEN duration_days = 1 THEN '1 day'
         WHEN duration_days <= 14 THEN '2-14 days'
         WHEN duration_days <= 40 THEN '15-40 days'
         ELSE 'Over 40 days'
     END AS duration_category
-FROM case_duration
+FROM case_duration;
+
+
+-- ============================================================
+-- 4. Case Duration Category KPI
+-- ============================================================
 
 SELECT
     duration_category,
@@ -42,7 +72,13 @@ SELECT
     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 2) AS case_percentage
 FROM case_duration_category
 GROUP BY duration_category
-ORDER BY total_cases DESC
+ORDER BY total_cases DESC;
+
+
+-- ============================================================
+-- 5. Activity Frequency KPI
+-- ============================================================
+-- Shows the most frequent activities in the event log.
 
 SELECT
     activity,
@@ -51,7 +87,13 @@ SELECT
     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 2) AS event_percentage
 FROM events
 GROUP BY activity
-ORDER BY total_events DESC
+ORDER BY total_events DESC;
+
+
+-- ============================================================
+-- 6. Completed Workflow Activity KPI
+-- ============================================================
+-- Focuses on completed manual workflow tasks, identified by W_ activities.
 
 SELECT
     activity,
@@ -62,60 +104,62 @@ WHERE
     activity LIKE 'W_%'
     AND LOWER(lifecycle_transition) = 'complete'
 GROUP BY activity
-ORDER BY completed_events DESC
+ORDER BY completed_events DESC;
 
-WITH completed_work AS (
-    SELECT
-        case_id,
-        activity,
-        COUNT(*) AS activity_count
-    FROM events
-    WHERE 
-        activity LIKE 'W_%'
-        AND LOWER(lifecycle_transition) = 'complete'
-    GROUP BY case_id, activity
-),
 
-repeated_work AS (
-    SELECT
-        case_id,
-        activity,
-        activity_count
-    FROM completed_work
-    WHERE activity_count > 1
-)
+-- ============================================================
+-- 7. Completed Work View
+-- ============================================================
+-- Counts completed workflow activities per case.
+-- Used to identify repeated workflow activities.
+
+CREATE OR REPLACE VIEW completed_work AS
+SELECT
+    case_id,
+    activity,
+    COUNT(*) AS activity_count
+FROM events
+WHERE 
+    activity LIKE 'W_%'
+    AND LOWER(lifecycle_transition) = 'complete'
+GROUP BY case_id, activity;
+
+
+-- ============================================================
+-- 8. Repeated Work View
+-- ============================================================
+-- A workflow activity is considered repeated work if it appears
+-- more than once as a completed activity in the same case.
+
+CREATE OR REPLACE VIEW repeated_work AS
+SELECT
+    case_id,
+    activity,
+    activity_count
+FROM completed_work
+WHERE activity_count > 1;
+
+
+-- ============================================================
+-- 9. Rework KPI
+-- ============================================================
 
 SELECT
-    r.activity,
-    COUNT(DISTINCT r.case_id) AS cases_with_rework,
-    ROUND(AVG(r.activity_count), 2) AS avg_repetitions_per_reworked_case,
-    MAX(r.activity_count) AS max_repetitions_in_case
-FROM repeated_work r
-GROUP BY r.activity
-ORDER BY cases_with_rework DESC
+    activity,
+    COUNT(DISTINCT case_id) AS cases_with_rework,
+    ROUND(AVG(activity_count), 2) AS avg_repetitions_per_reworked_case,
+    MAX(activity_count) AS max_repetitions_in_case
+FROM repeated_work
+GROUP BY activity
+ORDER BY cases_with_rework DESC;
 
-WITH completed_work AS (
-    SELECT
-        case_id,
-        activity,
-        COUNT(*) AS activity_count
-    FROM events
-    WHERE 
-        activity LIKE 'W_%'
-        AND LOWER(lifecycle_transition) = 'complete'
-    GROUP BY case_id, activity
-),
 
-repeated_work AS (
-    SELECT
-        case_id,
-        activity,
-        activity_count
-    FROM completed_work
-    WHERE activity_count > 1
-),
+-- ============================================================
+-- 10. Rework by Duration Category KPI
+-- ============================================================
+-- Compares repeated workflow activities across duration categories.
 
-cases_by_duration AS (
+WITH cases_by_duration AS (
     SELECT
         duration_category,
         COUNT(DISTINCT case_id) AS total_cases
@@ -142,8 +186,15 @@ GROUP BY
     b.total_cases
 ORDER BY
     c.duration_category,
-    rework_case_rate DESC
+    rework_case_rate DESC;
 
+
+-- ============================================================
+-- 11. Waiting Time View
+-- ============================================================
+-- Calculates waiting time between completed activities within each case.
+
+CREATE OR REPLACE VIEW waiting_times AS
 WITH completed_events AS (
     SELECT
         case_id,
@@ -159,24 +210,24 @@ WITH completed_events AS (
         ) AS previous_timestamp
     FROM events
     WHERE LOWER(lifecycle_transition) = 'complete'
-),
-
-waiting_times AS (
-    SELECT
-        case_id,
-        previous_activity,
-        activity,
-        previous_timestamp,
-        timestamp,
-        DATE_DIFF('second', previous_timestamp, timestamp) / 3600.0 AS waiting_time_hours,
-        DATE_DIFF('second', previous_timestamp, timestamp) / 86400.0 AS waiting_time_days
-    FROM completed_events
-    WHERE previous_activity IS NOT NULL
 )
+SELECT
+    case_id,
+    previous_activity,
+    activity,
+    previous_timestamp,
+    timestamp,
+    DATE_DIFF('second', previous_timestamp, timestamp) / 3600.0 AS waiting_time_hours,
+    DATE_DIFF('second', previous_timestamp, timestamp) / 86400.0 AS waiting_time_days
+FROM completed_events
+WHERE previous_activity IS NOT NULL;
 
-SELECT *
-FROM waiting_times
-ORDER BY waiting_time_hours DESC
+
+-- ============================================================
+-- 12. Waiting Time by Transition KPI
+-- ============================================================
+-- Summarizes waiting time between activity transitions.
+-- Only transitions with at least 30 occurrences are included.
 
 SELECT
     previous_activity,
@@ -192,7 +243,13 @@ GROUP BY
     previous_activity,
     activity
 HAVING COUNT(*) >= 30
-ORDER BY median_wait_days DESC
+ORDER BY median_wait_days DESC;
+
+
+-- ============================================================
+-- 13. Waiting Time by Duration Category KPI
+-- ============================================================
+-- Compares transition waiting times across case duration categories.
 
 WITH waiting_with_duration AS (
     SELECT
@@ -248,7 +305,13 @@ JOIN cases_by_duration c
     ON t.duration_category = c.duration_category
 ORDER BY
     t.duration_category,
-    t.median_wait_days DESC
+    t.median_wait_days DESC;
+
+
+-- ============================================================
+-- 14. Key Transition Comparison KPI
+-- ============================================================
+-- Focuses on the transitions most relevant to the EDA findings.
 
 WITH waiting_with_duration AS (
     SELECT
@@ -303,7 +366,13 @@ JOIN cases_by_duration c
 WHERE t.duration_category IN ('2-14 days', '15-40 days', 'Over 40 days')
 ORDER BY
     t.transition,
-    t.duration_category
+    t.duration_category;
+
+
+-- ============================================================
+-- 15. Resource Workload KPI
+-- ============================================================
+-- Shows which resources handled the most completed workflow activities.
 
 SELECT
     resource,
@@ -316,4 +385,5 @@ WHERE
     AND LOWER(lifecycle_transition) = 'complete'
     AND resource IS NOT NULL
 GROUP BY resource
-ORDER BY completed_workflow_events DESC
+ORDER BY completed_workflow_events DESC;
+```
