@@ -8,3 +8,4 @@ jupyter
 streamlit
 pm4py
 tqdm
+plotly
