@@ -1,0 +1,31 @@
+duration_category,activity,cases_with_rework,total_cases,rework_case_rate,avg_repetitions_per_reworked_case,max_repetitions_in_case
+1 day,W_Completeren aanvraag,246,408,60.29,3.88,10
+1 day,W_Afhandelen leads,45,408,11.03,2.38,6
+1 day,W_Beoordelen fraude,18,408,4.41,2.67,7
+1 day,W_Nabellen offertes,6,408,1.47,3.83,6
+1 day,W_Valideren aanvraag,4,408,0.98,3.0,4
+1 day,W_Nabellen incomplete dossiers,2,408,0.49,4.5,5
+15-40 days,W_Nabellen offertes,2304,2884,79.89,6.14,30
+15-40 days,W_Completeren aanvraag,1919,2884,66.54,5.84,34
+15-40 days,W_Valideren aanvraag,988,2884,34.26,3.52,16
+15-40 days,W_Nabellen incomplete dossiers,812,2884,28.16,8.14,45
+15-40 days,W_Afhandelen leads,140,2884,4.85,2.57,9
+15-40 days,W_Beoordelen fraude,12,2884,0.42,3.08,6
+2-14 days,W_Nabellen offertes,1756,2833,61.98,3.23,13
+2-14 days,W_Completeren aanvraag,1577,2833,55.67,4.24,24
+2-14 days,W_Valideren aanvraag,939,2833,33.15,3.0,12
+2-14 days,W_Nabellen incomplete dossiers,572,2833,20.19,4.94,25
+2-14 days,W_Afhandelen leads,149,2833,5.26,2.68,15
+2-14 days,W_Beoordelen fraude,32,2833,1.13,3.38,9
+Over 40 days,W_Nabellen offertes,197,200,98.5,11.97,33
+Over 40 days,W_Completeren aanvraag,122,200,61.0,5.14,21
+Over 40 days,W_Nabellen incomplete dossiers,82,200,41.0,21.55,60
+Over 40 days,W_Valideren aanvraag,81,200,40.5,4.74,28
+Over 40 days,W_Afhandelen leads,10,200,5.0,2.2,3
+Over 40 days,W_Beoordelen fraude,1,200,0.5,2.0,2
+Same day,W_Completeren aanvraag,556,6762,8.22,2.76,9
+Same day,W_Afhandelen leads,428,6762,6.33,2.4,10
+Same day,W_Beoordelen fraude,18,6762,0.27,2.67,6
+Same day,W_Nabellen offertes,11,6762,0.16,3.09,6
+Same day,W_Valideren aanvraag,8,6762,0.12,2.38,3
+Same day,W_Nabellen incomplete dossiers,6,6762,0.09,3.83,7

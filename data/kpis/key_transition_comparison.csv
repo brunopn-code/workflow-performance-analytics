@@ -1,0 +1,17 @@
+duration_category,transition,transition_count,total_cases,transitions_per_case,median_wait_days
+15-40 days,W_Completeren aanvraag → O_SENT_BACK,67,2884,0.02,6.11
+2-14 days,W_Completeren aanvraag → O_SENT_BACK,461,2833,0.16,5.94
+15-40 days,W_Completeren aanvraag → W_Nabellen offertes,1924,2884,0.67,2.06
+2-14 days,W_Completeren aanvraag → W_Nabellen offertes,1445,2833,0.51,0.0
+Over 40 days,W_Completeren aanvraag → W_Nabellen offertes,171,200,0.86,0.01
+15-40 days,W_Nabellen incomplete dossiers → O_SENT_BACK,144,2884,0.05,1.16
+2-14 days,W_Nabellen incomplete dossiers → O_SENT_BACK,32,2833,0.01,0.68
+15-40 days,W_Nabellen offertes → O_SENT_BACK,1362,2884,0.47,2.94
+2-14 days,W_Nabellen offertes → O_SENT_BACK,1220,2833,0.43,2.99
+Over 40 days,W_Nabellen offertes → O_SENT_BACK,107,200,0.54,3.68
+15-40 days,W_Nabellen offertes → W_Nabellen offertes,9637,2884,3.34,1.94
+2-14 days,W_Nabellen offertes → W_Nabellen offertes,2040,2833,0.72,0.88
+Over 40 days,W_Nabellen offertes → W_Nabellen offertes,1826,200,9.13,1.92
+15-40 days,W_Nabellen offertes → W_Valideren aanvraag,1019,2884,0.35,2.89
+2-14 days,W_Nabellen offertes → W_Valideren aanvraag,989,2833,0.35,1.99
+Over 40 days,W_Nabellen offertes → W_Valideren aanvraag,92,200,0.46,2.96
