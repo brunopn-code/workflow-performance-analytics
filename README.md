@@ -74,17 +74,15 @@ workflow-performance-analytics/
 
 ## Tools Used
 
-* Python
-* Pandas
-* PM4Py
-* Matplotlib
-* Jupyter Notebook
-
-## Tools Planned
-
-* SQL
-* PostgreSQL or DuckDB
-* Streamlit or Power BI
+- Python
+- Pandas
+- PM4Py
+- DuckDB
+- SQL
+- Matplotlib
+- Plotly
+- Streamlit
+- Jupyter Notebook
 
 ## Exploratory Data Analysis
 
@@ -172,6 +170,49 @@ Instead, delayed cases seem to be associated with:
 * repeated manual workflow activities
 
 The activity `W_Nabellen offertes` appears to be the strongest candidate for further bottleneck investigation because it becomes much more frequent in very delayed cases.
+
+## Dashboard
+
+A Streamlit dashboard was created to present the main workflow performance KPIs in an interactive format.
+
+The dashboard uses precomputed KPI tables stored in:
+
+```text
+data/kpis/
+```
+
+This means the dashboard can run without requiring the full event-level dataset to be included in the repository.
+
+Dashboard file:
+
+```text
+dashboard/app.py
+```
+
+### Run the Dashboard Locally
+
+From the root of the project folder, run:
+
+```bash
+streamlit run dashboard/app.py
+```
+
+The dashboard includes:
+
+* process overview KPIs
+* case duration categories
+* most frequent activities
+* rework by duration category
+* transition frequency per case
+* median waiting time by transition
+* resource workload
+* main business insight
+
+### Dashboard Purpose
+
+The dashboard translates the EDA and SQL KPI analysis into a business-facing monitoring tool.
+
+It highlights that delayed cases appear to be driven more by repeated follow-up cycles and waiting time between activities than by long individual task execution times.
 
 ## Next Steps
 
