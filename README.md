@@ -224,22 +224,13 @@ It highlights that delayed cases appear to be driven more by repeated follow-up 
 
 ## Next Steps
 
-The next stages of the project are:
+Potential future improvements include:
 
-1. Create SQL queries for process KPIs
-2. Build reusable Python metric functions
-3. Develop a dashboard for workflow monitoring
-4. Add business recommendations based on the analysis
-
-Planned dashboard metrics include:
-
-* total cases
-* average and median case duration
-* delayed case rate
-* most repeated activities
-* transition frequency per case
-* median waiting time by transition
-* resource workload
+1. Add more detailed resource workload analysis
+2. Add filtering by duration category and activity
+3. Add predictive modeling for delayed case risk
+4. Compare process variants between short and delayed cases
+5. Improve dashboard styling and deploy additional KPI views
 
 ## Portfolio Purpose
 
