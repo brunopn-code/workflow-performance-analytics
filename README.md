@@ -175,6 +175,10 @@ The activity `W_Nabellen offertes` appears to be the strongest candidate for fur
 
 A Streamlit dashboard was created to present the main workflow performance KPIs in an interactive format.
 
+### Dashboard Preview
+
+![Dashboard Overview](images/dashboard_overview.png)
+
 The dashboard uses precomputed KPI tables stored in:
 
 ```text
