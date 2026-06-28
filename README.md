@@ -179,6 +179,10 @@ A Streamlit dashboard was created to present the main workflow performance KPIs 
 
 ![Dashboard Overview](images/dashboard_overview.png)
 
+### Live Dashboard
+
+[Open the Streamlit dashboard](https://workflow-performance-analytics-brunopn.streamlit.app/)
+
 The dashboard uses precomputed KPI tables stored in:
 
 ```text
