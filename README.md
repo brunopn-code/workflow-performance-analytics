@@ -222,6 +222,22 @@ The dashboard translates the EDA and SQL KPI analysis into a business-facing mon
 
 It highlights that delayed cases appear to be driven more by repeated follow-up cycles and waiting time between activities than by long individual task execution times.
 
+## Business Recommendations
+
+Based on the analysis, the organization should monitor repeated offer follow-up cycles as a key process risk.
+
+The strongest bottleneck candidate is `W_Nabellen offertes`, especially when the same case returns repeatedly to this activity. Very delayed cases show a much higher number of `W_Nabellen offertes → W_Nabellen offertes` transitions per case, suggesting that repeated offer follow-up is a major signal of long-running applications.
+
+Recommended actions include:
+
+1. Create alerts for cases with repeated offer follow-up activity.
+2. Monitor cases that exceed a defined number of `W_Nabellen offertes` repetitions.
+3. Track waiting time after offer follow-up activities.
+4. Investigate why offers are repeatedly sent back or require multiple follow-ups.
+5. Use the dashboard to identify cases that are likely to become delayed before they reach extreme durations.
+
+These recommendations should be interpreted as process-monitoring suggestions rather than causal conclusions. The analysis identifies strong associations between repeated follow-up cycles, waiting time, and delayed cases.
+
 ## Next Steps
 
 Potential future improvements include:
