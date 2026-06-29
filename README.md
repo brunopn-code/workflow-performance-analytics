@@ -39,7 +39,9 @@ The full raw dataset is not included in this repository due to size. A small sam
 data/sample/bpi_2012_events_sample.csv
 ```
 
-The full dataset was downloaded locally, converted from `.xes.gz` to `.csv`, and used for the exploratory analysis.
+The full dataset was downloaded locally, converted from `.xes.gz` to `.csv`, and used for the exploratory analysis and KPI generation.
+
+The dashboard uses precomputed KPI tables generated from the full dataset, allowing the repository to remain lightweight while still presenting results based on the complete event log.
 
 ## Repository Structure
 
@@ -48,14 +50,26 @@ workflow-performance-analytics/
 │
 ├── data/
 │   ├── README.md
+│   ├── kpis/
+│   │   ├── activity_frequency.csv
+│   │   ├── case_duration_categories.csv
+│   │   ├── completed_workflow_activity.csv
+│   │   ├── key_transition_comparison.csv
+│   │   ├── resource_workload.csv
+│   │   ├── rework_by_duration.csv
+│   │   ├── rework_summary.csv
+│   │   ├── waiting_time_by_duration.csv
+│   │   └── waiting_time_summary.csv
 │   └── sample/
 │       └── bpi_2012_events_sample.csv
 │
 ├── notebooks/
 │   ├── 01_convert_xes_to_csv.ipynb
-│   └── 02_exploratory_analysis.ipynb
+│   ├── 02_exploratory_analysis.ipynb
+│   └── 03_sql_kpi_analysis.ipynb
 │
 ├── images/
+│   ├── dashboard_overview.png
 │   ├── eda_activity_frequency.png
 │   ├── eda_case_duration_boxplot.png
 │   ├── eda_case_duration_categories.png
@@ -66,23 +80,27 @@ workflow-performance-analytics/
 │   └── eda_median_waiting_time_by_transition.png
 │
 ├── sql/
-├── src/
+│   └── 01_process_kpis.sql
+│
 ├── dashboard/
+│   ├── README.md
+│   └── app.py
+│
 ├── requirements.txt
 └── README.md
 ```
 
 ## Tools Used
 
-- Python
-- Pandas
-- PM4Py
-- DuckDB
-- SQL
-- Matplotlib
-- Plotly
-- Streamlit
-- Jupyter Notebook
+* Python
+* Pandas
+* PM4Py
+* DuckDB
+* SQL
+* Matplotlib
+* Plotly
+* Streamlit
+* Jupyter Notebook
 
 ## Exploratory Data Analysis
 
@@ -171,6 +189,25 @@ Instead, delayed cases seem to be associated with:
 
 The activity `W_Nabellen offertes` appears to be the strongest candidate for further bottleneck investigation because it becomes much more frequent in very delayed cases.
 
+## SQL KPI Analysis
+
+SQL queries were created to transform the exploratory findings into reusable business KPIs.
+
+The SQL analysis is available in:
+
+```text
+notebooks/03_sql_kpi_analysis.ipynb
+sql/01_process_kpis.sql
+```
+
+The generated KPI tables are stored in:
+
+```text
+data/kpis/
+```
+
+These KPI tables support the dashboard without requiring the full event-level dataset to be included in the repository.
+
 ## Dashboard
 
 A Streamlit dashboard was created to present the main workflow performance KPIs in an interactive format.
@@ -254,8 +291,9 @@ This project is part of my data portfolio and is designed to demonstrate:
 
 * event log analysis
 * exploratory data analysis
+* SQL-based KPI creation
 * process analytics
-* business KPI creation
 * bottleneck investigation
+* business recommendations
+* dashboard development
 * data storytelling
-* dashboard planning
