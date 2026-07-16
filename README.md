@@ -4,7 +4,7 @@
 
 This portfolio project analyzes the **BPI Challenge 2012** event log, a real process mining dataset related to a loan application process.
 
-The goal is to identify bottlenecks, delays, rework patterns, waiting-time issues, and process inefficiencies using Python, SQL, and dashboarding.
+The goal is to identify bottlenecks, delays, rework patterns, waiting-time issues, and process inefficiencies using Python, SQL, Streamlit, and Power BI.
 
 ## Business Problem
 
@@ -41,7 +41,7 @@ data/sample/bpi_2012_events_sample.csv
 
 The full dataset was downloaded locally, converted from `.xes.gz` to `.csv`, and used for the exploratory analysis and KPI generation.
 
-The dashboard uses precomputed KPI tables generated from the full dataset, allowing the repository to remain lightweight while still presenting results based on the complete event log.
+The dashboards use precomputed KPI tables generated from the full dataset, allowing the repository to remain lightweight while still presenting results based on the complete event log.
 
 ## Repository Structure
 
@@ -86,6 +86,15 @@ workflow-performance-analytics/
 │   ├── README.md
 │   └── app.py
 │
+├── powerbi/
+│   ├── README.md
+│   ├── workflow_performance_dashboard.pbix
+│   └── screenshots/
+│       ├── process_overview.png
+│       ├── rework_analysis.png
+│       ├── waiting_time_bottlenecks.png
+│       └── executive_summary.png
+│
 ├── requirements.txt
 └── README.md
 ```
@@ -100,6 +109,7 @@ workflow-performance-analytics/
 * Matplotlib
 * Plotly
 * Streamlit
+* Power BI
 * Jupyter Notebook
 
 ## Exploratory Data Analysis
@@ -206,27 +216,36 @@ The generated KPI tables are stored in:
 data/kpis/
 ```
 
-These KPI tables support the dashboard without requiring the full event-level dataset to be included in the repository.
+These KPI tables support the dashboards without requiring the full event-level dataset to be included in the repository.
 
-## Dashboard
+## Dashboards
 
-A Streamlit dashboard was created to present the main workflow performance KPIs in an interactive format.
+This project includes two dashboard implementations:
 
-### Dashboard Preview
+1. a **Streamlit dashboard** for a lightweight interactive web application
+2. a **Power BI dashboard** for business intelligence reporting
 
-![Dashboard Overview](images/dashboard_overview.png)
-
-### Live Dashboard
-
-[Open the Streamlit dashboard](https://workflow-performance-analytics-brunopn.streamlit.app/)
-
-The dashboard uses precomputed KPI tables stored in:
+Both dashboards use precomputed KPI tables stored in:
 
 ```text
 data/kpis/
 ```
 
-This means the dashboard can run without requiring the full event-level dataset to be included in the repository.
+This allows the repository to remain lightweight while still presenting results generated from the full event log.
+
+---
+
+### Streamlit Dashboard
+
+A Streamlit dashboard was created to present the main workflow performance KPIs in an interactive format.
+
+#### Streamlit Dashboard Preview
+
+![Dashboard Overview](images/dashboard_overview.png)
+
+#### Live Dashboard
+
+[Open the Streamlit dashboard](https://workflow-performance-analytics-brunopn.streamlit.app/)
 
 Dashboard file:
 
@@ -234,7 +253,7 @@ Dashboard file:
 dashboard/app.py
 ```
 
-### Run the Dashboard Locally
+#### Run the Streamlit Dashboard Locally
 
 From the root of the project folder, run:
 
@@ -242,7 +261,7 @@ From the root of the project folder, run:
 streamlit run dashboard/app.py
 ```
 
-The dashboard includes:
+The Streamlit dashboard includes:
 
 * process overview KPIs
 * case duration categories
@@ -253,11 +272,40 @@ The dashboard includes:
 * resource workload
 * main business insight
 
+---
+
+### Power BI Dashboard
+
+A Power BI dashboard was also created to present the analysis in a business intelligence format.
+
+The Power BI report is available in:
+
+```text
+powerbi/workflow_performance_dashboard.pbix
+```
+
+The report includes four pages:
+
+1. **Process Overview**
+2. **Rework Analysis**
+3. **Waiting Time & Bottlenecks**
+4. **Executive Summary and Recommendations**
+
+#### Power BI Dashboard Screenshots
+
+![Power BI Process Overview](powerbi/screenshots/process_overview.png)
+
+![Power BI Rework Analysis](powerbi/screenshots/rework_analysis.png)
+
+![Power BI Waiting Time and Bottlenecks](powerbi/screenshots/waiting_time_bottlenecks.png)
+
+![Power BI Executive Summary](powerbi/screenshots/executive_summary.png)
+
 ### Dashboard Purpose
 
-The dashboard translates the EDA and SQL KPI analysis into a business-facing monitoring tool.
+The dashboards translate the EDA and SQL KPI analysis into business-facing monitoring tools.
 
-It highlights that delayed cases appear to be driven more by repeated follow-up cycles and waiting time between activities than by long individual task execution times.
+They highlight that delayed cases appear to be driven more by repeated follow-up cycles and waiting time between activities than by long individual task execution times.
 
 ## Business Recommendations
 
@@ -271,7 +319,7 @@ Recommended actions include:
 2. Monitor cases that exceed a defined number of `W_Nabellen offertes` repetitions.
 3. Track waiting time after offer follow-up activities.
 4. Investigate why offers are repeatedly sent back or require multiple follow-ups.
-5. Use the dashboard to identify cases that are likely to become delayed before they reach extreme durations.
+5. Use the dashboards to identify cases that are likely to become delayed before they reach extreme durations.
 
 These recommendations should be interpreted as process-monitoring suggestions rather than causal conclusions. The analysis identifies strong associations between repeated follow-up cycles, waiting time, and delayed cases.
 
@@ -279,11 +327,11 @@ These recommendations should be interpreted as process-monitoring suggestions ra
 
 Potential future improvements include:
 
-1. Add more detailed resource workload analysis
-2. Add filtering by duration category and activity
-3. Add predictive modeling for delayed case risk
-4. Compare process variants between short and delayed cases
-5. Improve dashboard styling and deploy additional KPI views
+1. Add predictive modeling for delayed case risk
+2. Compare process variants between short and delayed cases
+3. Add more interactive filtering to the dashboards
+4. Create automated alerts for cases with repeated offer follow-up loops
+5. Improve dashboard styling and add additional business KPI views
 
 ## Portfolio Purpose
 
@@ -295,5 +343,6 @@ This project is part of my data portfolio and is designed to demonstrate:
 * process analytics
 * bottleneck investigation
 * business recommendations
-* dashboard development
+* Streamlit dashboard development
+* Power BI dashboard development
 * data storytelling
