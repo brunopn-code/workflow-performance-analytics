@@ -22,8 +22,7 @@ The report imports:
 1. Process Overview
 2. Rework Analysis
 3. Waiting Time & Bottlenecks
-4. Resource Workload
-
+4. Executive Summary
 ## Purpose
 
 The goal of this dashboard is to provide business users with an interactive interface for monitoring workflow efficiency, identifying bottlenecks, and supporting operational decision-making.
